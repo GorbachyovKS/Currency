@@ -2,30 +2,110 @@
   <div class="widget">
     <div class="widget-info">
       <div class="item-top item">
-        <span
+        <span class="titleCur"
           >{{ wg.cur1.Cur_Abbreviation }}/{{ wg.cur2.Cur_Abbreviation }}</span
         >
-        <span>+0.0004(+0.376%)</span>
+        <div :class="{ backRed: Number.isFinite(rated) }">
+          <span>{{ rated }}</span
+          ><span>({{ percentRated }})</span>
+        </div>
       </div>
       <div class="item-bottom item">
         <span
-          ><i class="fa-solid fa-arrow-right"></i> 1.11683
+          ><i class="fa-solid fa-arrow-right"></i>
+          {{ nowRate }}
           {{ wg.cur2.Cur_Abbreviation }}</span
         >
         <span
-          ><i class="fa-solid fa-arrow-left"></i> 1.11700
+          ><i class="fa-solid fa-arrow-left"></i>
+          {{ prevRate }}
           {{ wg.cur2.Cur_Abbreviation }}</span
         >
       </div>
     </div>
-    <div class="widget-chart"></div>
+    <div class="widget-chart">
+      <LineChart />
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import LineChart from "./LineChart.vue";
 export default {
+  components: { LineChart },
   props: {
     wg: Object,
+  },
+  data() {
+    return {
+      prevCur1: {},
+      prevCur2: {},
+    };
+  },
+  mounted() {
+    this.fetchPrevCur(this.wg.cur1, 1);
+    this.fetchPrevCur(this.wg.cur2);
+  },
+  computed: {
+    rated() {
+      const cur1 = this.curOfScale(this.wg.cur1);
+      const cur2 = this.curOfScale(this.wg.cur2);
+      const prevcur1 = this.curOfScale(this.prevCur1);
+      const prevcur2 = this.curOfScale(this.prevCur2);
+      const result =
+        Math.round((cur1 / cur2 - prevcur1 / prevcur2) * 10000) / 10000;
+
+      if (result > 0) {
+        return "+" + result;
+      } else return result;
+    },
+    percentRated() {
+      const cur1 = this.curOfScale(this.wg.cur1);
+      const cur2 = this.curOfScale(this.wg.cur2);
+      const prevcur1 = this.curOfScale(this.prevCur1);
+      const prevcur2 = this.curOfScale(this.prevCur2);
+      const result =
+        Math.round(
+          ((cur1 / cur2 / (prevcur1 / prevcur2)) * 100 - 100) * 10000
+        ) / 10000;
+      if (result > 0) {
+        return "+" + result + "%";
+      } else return result + "%";
+    },
+    nowRate() {
+      const cur1 = this.curOfScale(this.wg.cur1);
+      const cur2 = this.curOfScale(this.wg.cur2);
+      return Math.round((cur1 / cur2) * 10000) / 10000;
+    },
+    prevRate() {
+      const cur1 = this.curOfScale(this.prevCur1);
+      const cur2 = this.curOfScale(this.prevCur2);
+      return Math.round((cur1 / cur2) * 10000) / 10000;
+    },
+  },
+  methods: {
+    curOfScale(cur) {
+      return cur.Cur_OfficialRate / cur.Cur_Scale;
+    },
+    async fetchPrevCur(cur, id) {
+      try {
+        const prevDay = new Date(new Date(cur.Date) - 86400000);
+        const response = await axios.get(
+          `https://www.nbrb.by/api/exrates/rates/${cur.Cur_ID}`,
+          {
+            params: {
+              ondate: prevDay,
+            },
+          }
+        );
+        if (id) {
+          this.prevCur1 = response.data;
+        } else this.prevCur2 = response.data;
+      } catch (e) {
+        console.log(e);
+      }
+    },
   },
 };
 </script>
@@ -36,7 +116,14 @@ export default {
   border-radius: 10px;
   color: white;
   font-size: 0.8rem;
+  transition: all 0.2s linear;
 }
+
+.widget:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 7px 30px -10px black;
+}
+
 .widget-info {
   padding: 20px 15px;
   display: flex;
@@ -51,12 +138,16 @@ export default {
   gap: 10px;
 }
 
-.item-top span:first-child {
+.titleCur {
   text-decoration: underline;
 }
 
-.item-top span:last-child {
+.item-top div:last-child {
   color: lightgreen;
   font-size: 0.65rem;
+}
+
+.backRed {
+  color: lightcoral !important;
 }
 </style>
