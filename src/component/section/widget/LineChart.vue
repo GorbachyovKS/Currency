@@ -1,5 +1,6 @@
 <template>
   <Line
+    ref="line"
     :chart-options="chartOptions"
     :chart-data="chartData"
     :chart-id="chartId"
@@ -20,9 +21,10 @@ import {
   LinearScale,
   PointElement,
   CategoryScale,
+  Filler,
 } from "chart.js";
 
-ChartJS.register(LineElement, LinearScale, PointElement, CategoryScale);
+ChartJS.register(LineElement, LinearScale, PointElement, CategoryScale, Filler);
 
 export default {
   components: {
@@ -61,22 +63,42 @@ export default {
   data() {
     return {
       chartData: {
-        labels: ["", "", "", "", "", "", "", "", "", "", "", "", ""],
+        labels: ["", "", "", "", "", "", "", ""],
         datasets: [
           {
-            data: [40, 20, 12, 20, 12, 20, 12, 20, 12],
+            data: [1, 2, 2.56, 2.623, 1.3452, 3, 2, 1],
             pointBackgroundColor: "transparent",
+            pointBorderColor: "transparent",
+            borderColor: "white",
+            borderWidth: 1,
+            backgroundColor: (ctx) => {
+              const canvas = ctx.chart.ctx;
+              const gradient = canvas.createLinearGradient(0, 0, 0, 160);
+
+              gradient.addColorStop(0, "rgba(255,255,255,0.7)");
+              gradient.addColorStop(0.5, "rgba(255,255,255,0.1)");
+              gradient.addColorStop(1, "transparent");
+
+              return gradient;
+            },
+            fill: true,
           },
         ],
       },
       chartOptions: {
         responsive: true,
-      },
-      styles: {
-        backgroundColor: "white",
+        scales: {
+          x: {
+            display: false,
+          },
+          y: {
+            display: false,
+          },
+        },
       },
     };
   },
+  mounted() {},
 };
 </script>
 
