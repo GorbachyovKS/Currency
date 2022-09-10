@@ -8,8 +8,8 @@
     :plugins="plugins"
     :css-classes="cssClasses"
     :styles="styles"
-    :width="width"
-    :height="height"
+    :width="265"
+    :height="70"
   />
 </template>
 
@@ -39,17 +39,12 @@ export default {
       type: String,
       default: "label",
     },
-    width: {
-      type: Number,
-      default: 0,
-    },
-    height: {
-      type: Number,
-      default: 0,
-    },
     cssClasses: {
       default: "",
       type: String,
+    },
+    dataCur: {
+      Array,
     },
     styles: {
       type: Object,
@@ -63,10 +58,10 @@ export default {
   data() {
     return {
       chartData: {
-        labels: ["", "", "", "", "", "", "", ""],
+        labels: Array.from({ length: this.dataCur.length }).map((u) => ""),
         datasets: [
           {
-            data: [1, 2, 2.56, 2.623, 1.3452, 3, 2, 1],
+            data: this.dataCur,
             pointBackgroundColor: "transparent",
             pointBorderColor: "transparent",
             borderColor: "white",
@@ -75,9 +70,8 @@ export default {
               const canvas = ctx.chart.ctx;
               const gradient = canvas.createLinearGradient(0, 0, 0, 160);
 
-              gradient.addColorStop(0, "rgba(255,255,255,0.7)");
-              gradient.addColorStop(0.5, "rgba(255,255,255,0.1)");
-              gradient.addColorStop(1, "transparent");
+              gradient.addColorStop(0, "rgba(255,255,255,0.2)");
+              gradient.addColorStop(1, "rgba(255,255,255,0)");
 
               return gradient;
             },

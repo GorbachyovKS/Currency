@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="widget-chart">
-      <LineChart />
+      <LineChart :dataCur="AttitudeCur" v-if="!!AttitudeCur[0]" />
     </div>
   </div>
 </template>
@@ -41,13 +41,27 @@ export default {
     return {
       prevCur1: {},
       prevCur2: {},
+      monthCur1: [],
+      monthCur2: [],
     };
   },
   mounted() {
     this.fetchPrevCur(this.wg.cur1, 1);
     this.fetchPrevCur(this.wg.cur2);
+    this.fetchMonthCur(this.wg.cur1, 1);
+    this.fetchMonthCur(this.wg.cur2);
   },
   computed: {
+    AttitudeCur() {
+      const result = [];
+      const max = Math.max(this.monthCur1.length, this.monthCur2.length);
+      for (let i = 0; i < max; i++) {
+        result.push(
+          Math.round((this.monthCur1[i] / this.monthCur2[i]) * 10000) / 10000
+        );
+      }
+      return result;
+    },
     rated() {
       const cur1 = this.curOfScale(this.wg.cur1);
       const cur2 = this.curOfScale(this.wg.cur2);
@@ -55,7 +69,6 @@ export default {
       const prevcur2 = this.curOfScale(this.prevCur2);
       const result =
         Math.round((cur1 / cur2 - prevcur1 / prevcur2) * 10000) / 10000;
-
       if (result > 0) {
         return "+" + result;
       } else return result;
@@ -106,6 +119,35 @@ export default {
         console.log(e);
       }
     },
+    async fetchMonthCur(cur, id) {
+      const date = new Date(cur.Date);
+      let month = new Date(date.setMonth(date.getMonth() - 1));
+      month = month.toLocaleDateString().split(".").reverse().join("-");
+      try {
+        const response = await axios.get(
+          `https://www.nbrb.by/API/ExRates/Rates/Dynamics/${cur.Cur_ID}`,
+          {
+            params: {
+              startdate: month,
+              enddate: cur.Date.slice(0, 10),
+            },
+          }
+        );
+        if (id) {
+          this.monthCur1 = [];
+          response.data.forEach((item) => {
+            this.monthCur1.push(item.Cur_OfficialRate);
+          });
+        } else {
+          this.monthCur2 = [];
+          response.data.forEach((item) => {
+            this.monthCur2.push(item.Cur_OfficialRate);
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
   },
 };
 </script>
@@ -129,7 +171,6 @@ export default {
   display: flex;
   justify-content: space-between;
   width: 270px;
-  height: 130px;
 }
 
 .item {
