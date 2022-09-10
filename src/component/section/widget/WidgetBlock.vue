@@ -1,6 +1,11 @@
 <template>
   <div class="widget-block">
-    <Widget v-for="wg in widget" :key="wg.id" :wg="wg" />
+    <Widget
+      v-for="wg in widget"
+      :key="wg.id"
+      :wg="wg"
+      @click="widgetSelect(wg)"
+    />
     <div class="widget">
       <button class="widget_button" @click="modalWidgetOpen = true">
         Add Widget
@@ -60,6 +65,9 @@ export default {
     };
   },
   methods: {
+    widgetSelect(currs) {
+      this.$emit("widgetSelect", currs);
+    },
     addWidget() {
       if (this.selectModal2 !== this.selectModal1) {
         let result = true;

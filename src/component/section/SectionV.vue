@@ -12,8 +12,8 @@
       />
     </div>
     <div class="content">
-      <WidgetBlock />
-      <Boards />
+      <WidgetBlock @widgetSelect="widgetSelect" />
+      <Boards :selectedWidget="selectedWidget" />
     </div>
   </section>
 </template>
@@ -26,7 +26,13 @@ export default {
   data() {
     return {
       searched: "",
+      selectedWidget: {},
     };
+  },
+  methods: {
+    widgetSelect(currs) {
+      this.selectedWidget = currs;
+    },
   },
 };
 </script>
@@ -46,6 +52,7 @@ export default {
   align-items: center;
   gap: 15px;
   color: lightgray;
+  background-color: white;
 }
 
 .inputSearch input {
@@ -60,5 +67,11 @@ export default {
 input::placeholder {
   color: lightgray;
   font-size: 1rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 </style>

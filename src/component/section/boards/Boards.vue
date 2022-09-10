@@ -1,9 +1,17 @@
 <template>
-  <div class="boards"></div>
+  <div class="boards">
+    <Tradeview :selectedWidget="selectedWidget" />
+  </div>
 </template>
 
 <script>
-export default {};
+import Tradeview from "./tradeview/Tradeview.vue";
+export default {
+  props: {
+    selectedWidget: Object,
+  },
+  components: { Tradeview },
+};
 </script>
 
 <style>
