@@ -1,6 +1,5 @@
 <template>
   <Line
-    ref="line"
     :chart-options="chartOptions"
     :chart-data="chartData"
     :chart-id="chartId"
@@ -22,9 +21,19 @@ import {
   PointElement,
   CategoryScale,
   Filler,
+  Tooltip,
+  Title,
 } from "chart.js";
 
-ChartJS.register(LineElement, LinearScale, PointElement, CategoryScale, Filler);
+ChartJS.register(
+  LineElement,
+  LinearScale,
+  PointElement,
+  CategoryScale,
+  Filler,
+  Tooltip,
+  Title
+);
 
 export default {
   components: {
@@ -65,6 +74,8 @@ export default {
             pointBorderColor: "rgba(88,64,187,1)",
             borderColor: "rgba(88,64,187,1)",
             borderWidth: 2,
+            pointHoverBackgroundColor: "red",
+            pointHoverBorderColor: "red",
           },
         ],
       },
@@ -77,8 +88,27 @@ export default {
             },
           },
         },
+        plugins: {
+          tooltip: {
+            backgroundColor: "#f6f5fc",
+            bodyColor: "black",
+            bodyFont: { weight: "bold" },
+            padding: 15,
+            cornerRadius: 10,
+            callbacks: {
+              title: () => {
+                return;
+              },
+            },
+            displayColors: false,
+          },
+        },
       },
     };
+  },
+  computed: {},
+  mounted() {
+    console.log(this.dataCur);
   },
 };
 </script>

@@ -1,6 +1,5 @@
 <template>
   <Line
-    ref="line"
     :chart-options="chartOptions"
     :chart-data="chartData"
     :chart-id="chartId"

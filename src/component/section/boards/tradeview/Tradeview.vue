@@ -17,10 +17,12 @@
     </div>
     <div class="charts">
       <LineChart
-        v-if="dataDate.length && !!AttitudeCur[0]"
+        v-if="dataDate.length && !!AttitudeCur[AttitudeCur.length - 1]"
         :dataDate="dataDate"
         :dataCur="AttitudeCur"
       />
+      <div class="load" v-if="cur1 && !dataDate.length">loading...</div>
+      <div class="load" v-if="!cur1">Currency not selected</div>
     </div>
   </div>
 </template>
@@ -37,6 +39,8 @@ export default {
     return {
       cur1: "",
       cur2: "",
+      scale1: "",
+      scale2: "",
       dataDate: [],
       selectDate: "Week",
     };
@@ -46,7 +50,43 @@ export default {
       const result = [];
       const max = Math.max(this.cur1.length, this.cur2.length);
       for (let i = 0; i < max; i++) {
-        result.push(Math.round((this.cur1[i] / this.cur2[i]) * 10000) / 10000);
+        result.push(
+          Math.round(
+            (this.cur1[i] / this.scale1 / (this.cur2[i] / this.scale1)) * 10000
+          ) / 10000
+        );
+      }
+      return result;
+    },
+    rated() {
+      const result = [];
+      const max = Math.max(this.cur1.length, this.cur2.length) - 1;
+      for (let i = max; i > 0; i--) {
+        result.push(
+          Math.round(
+            (this.cur1[i] / this.scale1 / (this.cur2[i] / this.scale1) -
+              this.cur1[i - 1] /
+                this.scale1 /
+                (this.cur2[i - 1] / this.scale1)) *
+              10000
+          ) / 10000
+        );
+      }
+      return result;
+    },
+    percentRate() {
+      const result = [];
+      const max = Math.max(this.cur1.length, this.cur2.length) - 1;
+      for (let i = max; i > 0; i--) {
+        const cur1 = this.cur1[i] / this.scale1;
+        const cur2 = this.cur2[i] / this.scale2;
+        const prevcur1 = this.cur1[i - 1] / this.scale1;
+        const prevcur2 = this.cur2[i - 1] / this.scale2;
+        result.push(
+          Math.round(
+            ((cur1 / cur2 / (prevcur1 / prevcur2)) * 100 - 100) * 10000
+          ) / 10000
+        );
       }
       return result;
     },
@@ -110,6 +150,8 @@ export default {
             this.cur2.push(item.Cur_OfficialRate);
           });
         }
+        this.scale1 = this.selectedWidget.cur1.Cur_Scale;
+        this.scale2 = this.selectedWidget.cur2.Cur_Scale;
       } catch (e) {
         console.log(e);
       }
@@ -134,5 +176,16 @@ export default {
   gap: 20px;
   padding: 20px 10px;
   color: #3e2b88;
+}
+
+.charts {
+  height: max-content;
+}
+
+.load {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
 }
 </style>
