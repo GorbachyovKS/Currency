@@ -9,7 +9,7 @@
         -</span
       >
       <span v-if="!selectedWidget.cur1">Select Widget</span>
-      <select v-model="selectDate">
+      <select v-model="selectDate" class="selectDatetime">
         <option>Week</option>
         <option>Month</option>
         <option>Year</option>
@@ -20,6 +20,8 @@
         v-if="dataDate.length && !!AttitudeCur[AttitudeCur.length - 1]"
         :dataDate="dataDate"
         :dataCur="AttitudeCur"
+        :rated="rated"
+        :percentRate="percentRate"
       />
       <div class="load" v-if="cur1 && !dataDate.length">loading...</div>
       <div class="load" v-if="!cur1">Currency not selected</div>
@@ -59,32 +61,24 @@ export default {
       return result;
     },
     rated() {
-      const result = [];
-      const max = Math.max(this.cur1.length, this.cur2.length) - 1;
-      for (let i = max; i > 0; i--) {
+      const result = [0];
+      const max = Math.max(this.cur1.length, this.cur2.length);
+      for (let i = 1; i < max; i++) {
         result.push(
-          Math.round(
-            (this.cur1[i] / this.scale1 / (this.cur2[i] / this.scale1) -
-              this.cur1[i - 1] /
-                this.scale1 /
-                (this.cur2[i - 1] / this.scale1)) *
-              10000
-          ) / 10000
+          Math.round((this.AttitudeCur[i] - this.AttitudeCur[i - 1]) * 10000) /
+            10000
         );
       }
       return result;
     },
     percentRate() {
-      const result = [];
-      const max = Math.max(this.cur1.length, this.cur2.length) - 1;
-      for (let i = max; i > 0; i--) {
-        const cur1 = this.cur1[i] / this.scale1;
-        const cur2 = this.cur2[i] / this.scale2;
-        const prevcur1 = this.cur1[i - 1] / this.scale1;
-        const prevcur2 = this.cur2[i - 1] / this.scale2;
+      const result = [0];
+      const max = Math.max(this.cur1.length, this.cur2.length);
+      for (let i = 1; i < max; i++) {
         result.push(
           Math.round(
-            ((cur1 / cur2 / (prevcur1 / prevcur2)) * 100 - 100) * 10000
+            ((this.AttitudeCur[i] / this.AttitudeCur[i - 1]) * 100 - 100) *
+              10000
           ) / 10000
         );
       }
@@ -166,6 +160,7 @@ export default {
   flex-direction: column;
   background-color: white;
   border-radius: 10px;
+  padding: 20px;
   width: 50%;
 }
 
@@ -187,5 +182,11 @@ export default {
   justify-content: center;
   align-items: center;
   height: 150px;
+}
+
+.selectDatetime {
+  border: none;
+  font: inherit;
+  outline: none;
 }
 </style>

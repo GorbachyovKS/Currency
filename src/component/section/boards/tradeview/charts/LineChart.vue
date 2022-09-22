@@ -62,6 +62,8 @@ export default {
     },
     dataDate: Array,
     dataCur: Array,
+    rated: Array,
+    percentRate: Array,
   },
   data() {
     return {
@@ -91,13 +93,32 @@ export default {
         plugins: {
           tooltip: {
             backgroundColor: "#f6f5fc",
-            bodyColor: "black",
-            bodyFont: { weight: "bold" },
+            titleColor: "black",
+            titleFont: { weight: "bold", size: 14 },
+            bodyFont: { weight: "bold", size: 11 },
+            bodyAlign: "center",
+            titleAlign: "center",
             padding: 15,
             cornerRadius: 10,
             callbacks: {
-              title: () => {
-                return;
+              title: (context) => {
+                return this.dataCur[context[0].dataIndex];
+              },
+              label: (context) => {
+                if (!this.rated[context.dataIndex])
+                  return this.rated[context.dataIndex] + ".0000";
+                return this.rated[context.dataIndex] + "";
+              },
+              afterBody: (context) => {
+                if (!this.percentRate[context[0].dataIndex])
+                  return (
+                    "(" + this.percentRate[context[0].dataIndex] + ".0000%)"
+                  );
+                return "(" + this.percentRate[context[0].dataIndex] + "%)";
+              },
+              labelTextColor: (context) => {
+                if (this.rated[context.dataIndex] > 0) return "green";
+                else return "red";
               },
             },
             displayColors: false,
@@ -108,7 +129,7 @@ export default {
   },
   computed: {},
   mounted() {
-    console.log(this.dataCur);
+    // console.log(this.dataCur);
   },
 };
 </script>

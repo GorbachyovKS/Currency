@@ -88,6 +88,11 @@ export default {
             display: false,
           },
         },
+        plugins: {
+          tooltip: {
+            enabled: false,
+          },
+        },
       },
     };
   },
