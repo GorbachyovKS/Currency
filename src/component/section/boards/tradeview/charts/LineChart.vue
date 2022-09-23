@@ -23,6 +23,7 @@ import {
   Filler,
   Tooltip,
   Title,
+  defaults,
 } from "chart.js";
 
 ChartJS.register(

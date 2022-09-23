@@ -161,7 +161,8 @@ export default {
   background-color: white;
   border-radius: 10px;
   padding: 20px;
-  width: 50%;
+  /* width: 50%; */
+  flex-grow: 1;
 }
 
 .title {
@@ -169,7 +170,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  padding: 20px 10px;
+  padding: 0 10px 20px;
   color: #3e2b88;
 }
 
@@ -187,6 +188,5 @@ export default {
 .selectDatetime {
   border: none;
   font: inherit;
-  outline: none;
 }
 </style>
