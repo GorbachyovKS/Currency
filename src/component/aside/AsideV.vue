@@ -108,6 +108,7 @@ export default {};
   gap: 20px;
   margin-bottom: 20px;
   width: max-content;
+  flex-grow: 1;
 }
 
 .list li {

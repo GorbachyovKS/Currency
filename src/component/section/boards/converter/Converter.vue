@@ -51,16 +51,17 @@
 </template>
 
 <script>
-import axios from "axios";
 export default {
+  props: {
+    curr: Array,
+    date: String,
+  },
   data() {
     return {
-      curr: [],
       selectFrom: "USD",
       selectTo: "EUR",
       amount: 1,
       convertredTo: null,
-      date: "",
     };
   },
   watch: {
@@ -72,6 +73,24 @@ export default {
     },
     selectTo() {
       this.convertredTo = this.forConvertedTo;
+    },
+    curr: {
+      handler() {
+        let cur1 = this.curr.filter(
+          (item) => item.Cur_Abbreviation === this.selectFrom
+        )[0];
+        let cur2 = this.curr.filter(
+          (item) => item.Cur_Abbreviation === this.selectTo
+        )[0];
+        this.convertredTo =
+          Math.round(
+            (cur1.Cur_OfficialRate /
+              cur1.Cur_Scale /
+              (cur2.Cur_OfficialRate / cur2.Cur_Scale)) *
+              100
+          ) / 100;
+      },
+      deep: true,
     },
   },
   computed: {
@@ -93,30 +112,6 @@ export default {
     },
   },
   methods: {
-    async fetchCurr() {
-      try {
-        const response = await axios.get(
-          "https://www.nbrb.by/api/exrates/rates?periodicity=0"
-        );
-        this.curr = response.data;
-        this.date = (new Date(response.data[0].Date) + "").slice(4, 15);
-        let cur1 = this.curr.filter(
-          (item) => item.Cur_Abbreviation === this.selectFrom
-        )[0];
-        let cur2 = this.curr.filter(
-          (item) => item.Cur_Abbreviation === this.selectTo
-        )[0];
-        this.convertredTo =
-          Math.round(
-            (cur1.Cur_OfficialRate /
-              cur1.Cur_Scale /
-              (cur2.Cur_OfficialRate / cur2.Cur_Scale)) *
-              100
-          ) / 100;
-      } catch (e) {
-        console.log(e);
-      }
-    },
     convert() {
       let elem = this.selectFrom;
       this.selectFrom = this.selectTo;
@@ -126,9 +121,6 @@ export default {
       this.amount = this.convertredTo;
       this.convertredTo = elem;
     },
-  },
-  mounted() {
-    this.fetchCurr();
   },
 };
 </script>
@@ -140,8 +132,7 @@ export default {
   background-color: white;
   border-radius: 10px;
   padding: 20px;
-  /* width: 50%; */
-  flex-grow: 0.5;
+  width: 46%;
   font-family: inherit;
   font-size: 12px;
 }
@@ -179,13 +170,18 @@ export default {
   background-color: #f1edff;
 }
 
-.convertredTo {
-  margin-bottom: 10px;
+.fromTo,
+.amount {
+  margin-bottom: 18px;
 }
 
 .amount__title,
 .convertredTo__title {
   margin-bottom: 5px;
+}
+
+.convertredTo {
+  margin-bottom: 20px;
 }
 
 input,

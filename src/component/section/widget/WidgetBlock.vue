@@ -64,6 +64,15 @@ export default {
       selectModal2: "EUR",
     };
   },
+  watch: {
+    widget: {
+      handler() {
+        const parsed = JSON.stringify(this.widget);
+        localStorage.setItem("widget", parsed);
+      },
+      deep: true,
+    },
+  },
   methods: {
     widgetSelect(currs) {
       this.$emit("widgetSelect", currs);
@@ -105,6 +114,11 @@ export default {
     },
   },
   mounted() {
+    if (localStorage.getItem("widget")) {
+      try {
+        this.widget = JSON.parse(localStorage.getItem("widget"));
+      } catch {}
+    }
     this.fetchCurr();
   },
 };

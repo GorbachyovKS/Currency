@@ -8,7 +8,17 @@
         }}
         -</span
       >
-      <span v-if="!selectedWidget.cur1">Select Widget</span>
+
+      <span v-if="!selectedWidget.cur1 && localeStorageWidget.cur1"
+        >{{ localeStorageWidget.cur1.Cur_Abbreviation }}/{{
+          localeStorageWidget.cur2.Cur_Abbreviation
+        }}
+        -</span
+      >
+
+      <span v-if="!selectedWidget.cur1 && !localeStorageWidget.cur1"
+        >Select Widget</span
+      >
       <select v-model="selectDate" class="selectDatetime">
         <option>Week</option>
         <option>Month</option>
@@ -45,6 +55,7 @@ export default {
       scale2: "",
       dataDate: [],
       selectDate: "Week",
+      localeStorageWidget: {},
     };
   },
   computed: {
@@ -99,6 +110,14 @@ export default {
         const { cur1, cur2 } = n;
         this.fetchMonthCur(cur1, this.selectDate, 1);
         this.fetchMonthCur(cur2, this.selectDate);
+        this.localeStorageWidget = n;
+      },
+      deep: true,
+    },
+    localeStorageWidget: {
+      handler() {
+        const parsed = JSON.stringify(this.localeStorageWidget);
+        localStorage.setItem("tradeview", parsed);
       },
       deep: true,
     },
@@ -144,12 +163,32 @@ export default {
             this.cur2.push(item.Cur_OfficialRate);
           });
         }
-        this.scale1 = this.selectedWidget.cur1.Cur_Scale;
-        this.scale2 = this.selectedWidget.cur2.Cur_Scale;
+        if (Object.keys(this.selectedWidget).length) {
+          this.scale1 = this.selectedWidget.cur1.Cur_Scale;
+          this.scale2 = this.selectedWidget.cur1.Cur_Scale;
+        } else {
+          this.scale1 = this.localeStorageWidget.cur1.Cur_Scale;
+          this.scale2 = this.localeStorageWidget.cur1.Cur_Scale;
+        }
       } catch (e) {
         console.log(e);
       }
     },
+  },
+  mounted() {
+    if (localStorage.getItem("tradeview")) {
+      try {
+        this.localeStorageWidget = JSON.parse(
+          localStorage.getItem("tradeview")
+        );
+      } catch {}
+    }
+    if (Object.keys(this.localeStorageWidget).length) {
+      this.dataDate = [];
+      const { cur1, cur2 } = this.localeStorageWidget;
+      this.fetchMonthCur(cur1, this.selectDate, 1);
+      this.fetchMonthCur(cur2, this.selectDate);
+    }
   },
 };
 </script>
@@ -161,8 +200,7 @@ export default {
   background-color: white;
   border-radius: 10px;
   padding: 20px;
-  /* width: 50%; */
-  flex-grow: 1;
+  width: 50%;
 }
 
 .title {

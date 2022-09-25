@@ -38,7 +38,6 @@ body {
 
 .wrapper {
   display: flex;
-  height: inherit;
   gap: 20px;
 }
 </style>
