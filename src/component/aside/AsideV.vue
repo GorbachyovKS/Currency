@@ -7,45 +7,14 @@
       <span>Be Wealthy</span>
     </header>
     <menu class="list">
-      <li>
-        <i class="fa-solid fa-table-columns"></i>
-        <a href="#">Dashboard</a>
-      </li>
-      <li>
-        <i class="fa-solid fa-rotate-right"></i>
-        <a href="#">Converter</a>
-      </li>
-      <li>
-        <i class="fa-solid fa-calculator"></i>
-        <a href="#">Calculator</a>
-      </li>
-      <li>
-        <i class="fa-solid fa-money-bill-trend-up"></i>
-        <a href="#">Bank Exchange rate</a>
-      </li>
-      <li>
-        <i class="fa-solid fa-chart-simple"></i>
-        <a href="#">Tradeview</a>
-      </li>
-      <li>
-        <i class="fa-solid fa-book-open"></i>
-        <a href="#">Newsfeed</a>
-      </li>
-      <li>
-        <i class="fa-solid fa-globe"></i>
-        <a href="#">Travel Helper</a>
-      </li>
-      <li>
-        <i class="fa-solid fa-message"></i>
-        <a href="#">Support</a>
-      </li>
-      <li>
-        <i class="fa-solid fa-chart-pie"></i>
-        <a href="#">Analytic</a>
-      </li>
-      <li>
-        <i class="fa-solid fa-sliders"></i>
-        <a href="#">Setting</a>
+      <li
+        v-for="li in menu"
+        :key="li.id"
+        @click="activated(li.id)"
+        :class="{ active: li.active }"
+      >
+        <i class="fa-solid" :class="li.classFa"></i>
+        <a href="#">{{ li.name }}</a>
       </li>
     </menu>
     <footer>&copy; Eastbanc Technologies, 2019</footer>
@@ -53,7 +22,42 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      menu: [
+        {
+          id: 1,
+          name: "Dashboard",
+          classFa: "fa-table-columns",
+          active: false,
+        },
+        { id: 2, name: "Converter", classFa: "fa-rotate-right", active: false },
+        { id: 3, name: "Calculator", classFa: "fa-calculator", active: false },
+        {
+          id: 4,
+          name: "Bank Exchange rate",
+          classFa: "fa-money-bill-trend-up",
+          active: false,
+        },
+        { id: 5, name: "Tradeview", classFa: "fa-chart-simple", active: false },
+        { id: 6, name: "Newsfeed", classFa: "fa-book-open", active: false },
+        { id: 7, name: "Travel Helper", classFa: "fa-globe", active: false },
+        { id: 8, name: "Support", classFa: "fa-message", active: false },
+        { id: 9, name: "Analytic", classFa: "fa-chart-pie" },
+        { id: 10, name: "Setting", classFa: "fa-sliders", active: false },
+      ],
+    };
+  },
+  methods: {
+    activated(e) {
+      this.menu.forEach((item) => {
+        if (item.id === e) item.active = true;
+        else item.active = false;
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -132,12 +136,13 @@ export default {};
   left: 100%;
   width: 100%;
   height: 100%;
-  background: white;
+  background: #f6f5fc;
   transition: left 0.5s;
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
 }
 
+.list .active:before,
 .list li:hover:before {
   left: 0;
 }
@@ -148,6 +153,7 @@ export default {};
   color: white;
 }
 
+.list .active a,
 .list li:hover a {
   color: #3e2b88;
   position: relative;

@@ -1,30 +1,35 @@
 <template>
-  <div class="widget">
-    <div class="widget-info">
-      <div class="item-top item">
-        <span class="titleCur"
-          >{{ wg.cur1.Cur_Abbreviation }}/{{ wg.cur2.Cur_Abbreviation }}</span
-        >
-        <div :class="{ backRed: Number.isFinite(rated) }">
-          <span>{{ rated }}</span
-          ><span>({{ percentRated }})</span>
+  <div class="layer">
+    <div class="exit" @click="deleteWidget(wg)">
+      <i class="fa-solid fa-xmark"></i>
+    </div>
+    <div class="widget">
+      <div class="widget-info">
+        <div class="item-top item">
+          <span class="titleCur"
+            >{{ wg.cur1.Cur_Abbreviation }}/{{ wg.cur2.Cur_Abbreviation }}</span
+          >
+          <div :class="{ backRed: Number.isFinite(rated) }">
+            <span>{{ rated }}</span
+            ><span>({{ percentRated }})</span>
+          </div>
+        </div>
+        <div class="item-bottom item">
+          <span
+            ><i class="fa-solid fa-arrow-right"></i>
+            {{ nowRate }}
+            {{ wg.cur2.Cur_Abbreviation }}</span
+          >
+          <span
+            ><i class="fa-solid fa-arrow-left"></i>
+            {{ prevRate }}
+            {{ wg.cur2.Cur_Abbreviation }}</span
+          >
         </div>
       </div>
-      <div class="item-bottom item">
-        <span
-          ><i class="fa-solid fa-arrow-right"></i>
-          {{ nowRate }}
-          {{ wg.cur2.Cur_Abbreviation }}</span
-        >
-        <span
-          ><i class="fa-solid fa-arrow-left"></i>
-          {{ prevRate }}
-          {{ wg.cur2.Cur_Abbreviation }}</span
-        >
+      <div class="widget-chart">
+        <LineChart :dataCur="AttitudeCur" v-if="!!AttitudeCur[0]" />
       </div>
-    </div>
-    <div class="widget-chart">
-      <LineChart :dataCur="AttitudeCur" v-if="!!AttitudeCur[0]" />
     </div>
   </div>
 </template>
@@ -148,11 +153,19 @@ export default {
         console.log(e);
       }
     },
+    deleteWidget(e) {
+      this.$emit("deleteWidget", e);
+    },
   },
 };
 </script>
 
 <style scoped>
+.layer {
+  position: relative;
+  transition: all 0.2s linear;
+  border-radius: 10px;
+}
 .widget {
   background-color: #5840bb;
   border-radius: 10px;
@@ -161,7 +174,7 @@ export default {
   transition: all 0.2s linear;
 }
 
-.widget:hover {
+.layer:hover {
   transform: translateY(-5px);
   box-shadow: 0px 7px 30px -10px black;
 }
@@ -190,5 +203,19 @@ export default {
 
 .backRed {
   color: lightcoral !important;
+}
+
+.exit {
+  position: absolute;
+  top: 5px;
+  right: 7px;
+  color: white;
+}
+
+.exit:hover {
+  cursor: pointer;
+}
+.exit:hover + .widget {
+  background-color: rgba(250, 109, 109, 0.937);
 }
 </style>

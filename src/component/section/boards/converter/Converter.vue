@@ -211,4 +211,10 @@ input::-webkit-inner-spin-button {
   display: flex;
   justify-content: flex-end;
 }
+
+@media only screen and (max-width: 1417.6px) {
+  .converter {
+    width: 50%;
+  }
+}
 </style>

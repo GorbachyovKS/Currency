@@ -5,6 +5,7 @@
       :key="wg.id"
       :wg="wg"
       @click="widgetSelect(wg)"
+      @deleteWidget="deleteWidget"
     />
     <div class="widget">
       <button class="widget_button" @click="modalWidgetOpen = true">
@@ -111,6 +112,9 @@ export default {
       } catch (e) {
         console.log(e);
       }
+    },
+    deleteWidget(e) {
+      this.widget = this.widget.filter((item) => item.id !== e.id);
     },
   },
   mounted() {

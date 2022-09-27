@@ -1,13 +1,13 @@
 <template>
   <div class="boards">
     <div class="boards__item">
-      <Tradeview :selectedWidget="selectedWidget" />
-      <ExchangeRates />
+      <Tradeview :selectedWidget="selectedWidget" class="elemTranf" />
+      <ExchangeRates class="elemTranf" />
     </div>
     <div class="boards__item">
-      <Converter :date="date" :curr="curr" />
-      <Calculator :date="date" :curr="curr" />
-      <Newsfeed />
+      <Converter :date="date" :curr="curr" class="elemTranf" />
+      <Calculator :date="date" :curr="curr" class="elemTranf" />
+      <Newsfeed class="elemTranf" />
     </div>
   </div>
 </template>
@@ -65,5 +65,20 @@ export default {
 
 .boards__item:last-child {
   flex-wrap: nowrap;
+}
+
+@media only screen and (max-width: 1417.6px) {
+  .boards__item:last-child {
+    flex-wrap: wrap;
+  }
+}
+
+.elemTranf {
+  transition: all 0.2s linear;
+}
+
+.elemTranf:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 7px 30px -10px black;
 }
 </style>
