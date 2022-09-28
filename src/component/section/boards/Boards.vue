@@ -1,7 +1,11 @@
 <template>
   <div class="boards">
     <div class="boards__item">
-      <Tradeview :selectedWidget="selectedWidget" class="elemTranf" />
+      <Tradeview
+        :selectedWidget="selectedWidget"
+        class="elemTranf"
+        :mobileActive="mobileActive"
+      />
       <ExchangeRates class="elemTranf" />
     </div>
     <div class="boards__item">
@@ -22,6 +26,7 @@ import Newsfeed from "./newsfeed/Newsfeed.vue";
 export default {
   props: {
     selectedWidget: Object,
+    mobileActive: Boolean,
   },
   components: { Tradeview, ExchangeRates, Converter, Calculator, Newsfeed },
   data() {
@@ -80,5 +85,11 @@ export default {
 .elemTranf:hover {
   transform: translateY(-5px);
   box-shadow: 0px 7px 30px -10px black;
+}
+
+@media only screen and (max-width: 560px) {
+  .elemTranf {
+    flex-grow: 1;
+  }
 }
 </style>

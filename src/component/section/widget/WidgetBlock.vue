@@ -107,7 +107,6 @@ export default {
         const response = await axios.get(
           "https://www.nbrb.by/api/exrates/rates?periodicity=0"
         );
-        const data = response.data;
         this.curr = response.data;
       } catch (e) {
         console.log(e);

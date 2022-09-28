@@ -46,6 +46,7 @@ export default {
   components: { LineChart },
   props: {
     selectedWidget: Object,
+    mobileActive: Boolean,
   },
   data() {
     return {
@@ -102,6 +103,10 @@ export default {
         this.dataDate = [];
         this.fetchMonthCur(this.selectedWidget.cur1, n, 1);
         this.fetchMonthCur(this.selectedWidget.cur2, n);
+      } else if (this.localeStorageWidget.id) {
+        this.dataDate = [];
+        this.fetchMonthCur(this.localeStorageWidget.cur1, n, 1);
+        this.fetchMonthCur(this.localeStorageWidget.cur2, n);
       }
     },
     selectedWidget: {
@@ -200,7 +205,7 @@ export default {
   background-color: white;
   border-radius: 10px;
   padding: 20px;
-  width: 50%;
+  flex-grow: 0.2;
 }
 
 .title {
@@ -214,6 +219,7 @@ export default {
 
 .charts {
   height: max-content;
+  width: clamp(200px, 100%, 600px);
 }
 
 .load {
@@ -226,5 +232,17 @@ export default {
 .selectDatetime {
   border: none;
   font: inherit;
+}
+
+@media only screen and (max-width: 1030px) {
+  .charts {
+    width: clamp(200px, 100%, 450px);
+  }
+}
+
+@media only screen and (max-width: 850px) {
+  .charts {
+    width: clamp(400px, 75%, 500px);
+  }
 }
 </style>

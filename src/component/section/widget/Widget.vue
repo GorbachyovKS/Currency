@@ -179,6 +179,10 @@ export default {
   box-shadow: 0px 7px 30px -10px black;
 }
 
+.layer:hover .exit {
+  display: block;
+}
+
 .widget-info {
   padding: 20px 15px;
   display: flex;
@@ -210,6 +214,7 @@ export default {
   top: 5px;
   right: 7px;
   color: white;
+  display: none;
 }
 
 .exit:hover {

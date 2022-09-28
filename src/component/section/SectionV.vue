@@ -13,7 +13,7 @@
     </div>
     <div class="content">
       <WidgetBlock @widgetSelect="widgetSelect" />
-      <Boards :selectedWidget="selectedWidget" />
+      <Boards :selectedWidget="selectedWidget" :mobileActive="mobileActive" />
     </div>
   </section>
 </template>
@@ -23,6 +23,9 @@ import Boards from "./boards/Boards.vue";
 import WidgetBlock from "./widget/WidgetBlock.vue";
 export default {
   components: { WidgetBlock, Boards },
+  props: {
+    mobileActive: Boolean,
+  },
   data() {
     return {
       searched: "",

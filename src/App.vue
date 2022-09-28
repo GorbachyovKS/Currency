@@ -1,17 +1,32 @@
 <template>
-  <div class="wrapper">
-    <AsideV />
-    <SectionV />
+  <div class="wrapper" :class="{ mobilaDisplay: mobileActive }">
+    <AsideV v-if="!mobileActive" />
+    <SectionV :mobileActive="mobileActive" />
+    <AsideMobile v-if="mobileActive" />
   </div>
 </template>
 
 <script>
+import AsideMobile from "./component/aside/AsideMobile.vue";
 import AsideV from "./component/aside/AsideV.vue";
 import SectionV from "./component/section/SectionV.vue";
 export default {
   components: {
     AsideV,
     SectionV,
+    AsideMobile,
+  },
+  data() {
+    return {
+      mobileActive: false,
+    };
+  },
+  mounted() {
+    window.onresize = (e) => {
+      let size = e.target.innerWidth;
+      if (size < 850) this.mobileActive = true;
+      else this.mobileActive = false;
+    };
   },
 };
 </script>
@@ -28,7 +43,7 @@ export default {
 
 html,
 body {
-  height: 100%;
+  height: max-content;
   background-color: #f6f5fc;
 }
 
@@ -39,5 +54,10 @@ body {
 .wrapper {
   display: flex;
   gap: 20px;
+}
+
+.mobilaDisplay {
+  display: block;
+  gap: 0px;
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
   <Line
+    ref="line"
     :chart-options="chartOptions"
     :chart-data="chartData"
     :chart-id="chartId"
@@ -7,8 +8,8 @@
     :plugins="plugins"
     :css-classes="cssClasses"
     :styles="styles"
-    :width="300"
-    :height="150"
+    :width="550"
+    :height="300"
   />
 </template>
 
@@ -23,7 +24,6 @@ import {
   Filler,
   Tooltip,
   Title,
-  defaults,
 } from "chart.js";
 
 ChartJS.register(
@@ -127,10 +127,6 @@ export default {
         },
       },
     };
-  },
-  computed: {},
-  mounted() {
-    // console.log(this.dataCur);
   },
 };
 </script>

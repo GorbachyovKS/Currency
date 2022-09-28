@@ -22,7 +22,11 @@
 </template>
 
 <script>
+import AsideMobile from "./AsideMobile.vue";
 export default {
+  components: { AsideMobile },
+  props: {
+  },
   data() {
     return {
       menu: [
@@ -30,7 +34,7 @@ export default {
           id: 1,
           name: "Dashboard",
           classFa: "fa-table-columns",
-          active: false,
+          active: true,
         },
         { id: 2, name: "Converter", classFa: "fa-rotate-right", active: false },
         { id: 3, name: "Calculator", classFa: "fa-calculator", active: false },
@@ -62,12 +66,12 @@ export default {
 
 <style scoped>
 .aside {
-  height: inherit;
   padding: 25px 0 25px 30px;
   background-color: #5840bb;
   color: white;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
+  height: inherit;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
