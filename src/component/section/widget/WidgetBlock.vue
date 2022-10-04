@@ -1,5 +1,5 @@
 <template>
-  <div class="widget-block">
+  <div class="widget-block" :class="{ 'widget-mobileBlock': mobileActive }">
     <Widget
       v-for="wg in widget"
       :key="wg.id"
@@ -56,6 +56,9 @@ import axios from "axios";
 import Widget from "./Widget.vue";
 export default {
   components: { Widget },
+  props: {
+    mobileActive: Boolean,
+  },
   data() {
     return {
       curr: [],
@@ -116,13 +119,22 @@ export default {
       this.widget = this.widget.filter((item) => item.id !== e.id);
     },
   },
-  mounted() {
+  async mounted() {
+    await this.fetchCurr();
     if (localStorage.getItem("widget")) {
       try {
-        this.widget = JSON.parse(localStorage.getItem("widget"));
+        let widgetsStorage = JSON.parse(localStorage.getItem("widget"));
+        if (this.curr.length) {
+          widgetsStorage.forEach((item) => {
+            this.curr.forEach((cur) => {
+              if (cur.Cur_ID === item.cur1.Cur_ID) item.cur1 = cur;
+              if (cur.Cur_ID === item.cur2.Cur_ID) item.cur2 = cur;
+            });
+          });
+          this.widget = widgetsStorage;
+        }
       } catch {}
     }
-    this.fetchCurr();
   },
 };
 </script>
@@ -130,8 +142,16 @@ export default {
 <style scoped>
 .widget-block {
   display: flex;
-  flex-wrap: wrap;
   gap: 20px;
+  padding: 30px 0 30px 30px;
+  margin-left: -30px;
+  flex-wrap: wrap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.widget-mobileBlock {
+  flex-wrap: nowrap;
 }
 
 .widget:last-child {
@@ -250,5 +270,20 @@ export default {
 :root:lang(iw) .select {
   background-position: left 0.7em top 50%, 0 0;
   padding: 0.6em 0.8em 0.5em 1.4em;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  display: none;
+}
+
+::-webkit-scrollbar-button:vertical:start:decrement,
+::-webkit-scrollbar-button:vertical:end:increment,
+::-webkit-scrollbar-button:horizontal:start:decrement,
+::-webkit-scrollbar-button:horizontal:end:increment {
+  display: none;
 }
 </style>

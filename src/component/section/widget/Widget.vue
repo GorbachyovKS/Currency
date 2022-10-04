@@ -1,6 +1,6 @@
 <template>
   <div class="layer">
-    <div class="exit" @click="deleteWidget(wg)">
+    <div class="exit" @click.stop="deleteWidget(wg)">
       <i class="fa-solid fa-xmark"></i>
     </div>
     <div class="widget">

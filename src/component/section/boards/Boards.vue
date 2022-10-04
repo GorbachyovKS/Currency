@@ -53,9 +53,8 @@ export default {
   },
 };
 </script>
-,
-    Calculator
-<style>
+
+<style scoped>
 .boards {
   display: flex;
   flex-direction: column;

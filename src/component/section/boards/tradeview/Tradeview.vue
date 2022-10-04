@@ -1,5 +1,6 @@
 <template>
   <div class="tradeview">
+    <a name="Tradeview"></a>
     <div class="title">
       <h3>Tradeview</h3>
       <span v-if="selectedWidget.cur1"

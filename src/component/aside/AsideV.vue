@@ -22,11 +22,10 @@
 </template>
 
 <script>
-import AsideMobile from "./AsideMobile.vue";
+import AsideMobile from "./AsideMobileBottom.vue";
 export default {
   components: { AsideMobile },
-  props: {
-  },
+  props: {},
   data() {
     return {
       menu: [

@@ -1,6 +1,11 @@
 <template>
   <section class="section">
-    <div class="inputSearch" @click="$refs.inpFocused.focus()">
+    <a name="Dashboard"></a>
+    <div
+      class="inputSearch"
+      @click="$refs.inpFocused.focus()"
+      v-if="!mobileActive"
+    >
       <i class="fa-solid fa-magnifying-glass"></i>
       <input
         ref="inpFocused"
@@ -12,7 +17,7 @@
       />
     </div>
     <div class="content">
-      <WidgetBlock @widgetSelect="widgetSelect" />
+      <WidgetBlock @widgetSelect="widgetSelect" :mobileActive="mobileActive" />
       <Boards :selectedWidget="selectedWidget" :mobileActive="mobileActive" />
     </div>
   </section>
@@ -75,6 +80,6 @@ input::placeholder {
 .content {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 15px;
 }
 </style>

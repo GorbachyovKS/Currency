@@ -1,5 +1,6 @@
 <template>
   <div class="calc">
+    <a name="Calculator"></a>
     <div class="calc__title">
       <h3>Calculator</h3>
     </div>
